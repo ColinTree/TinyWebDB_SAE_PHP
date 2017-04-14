@@ -27,7 +27,7 @@
 ![](http://extensions.sinacloud.net/ArticlePics/TinyWebDB_SAE_PHP/step2.png)  
 ![](http://extensions.sinacloud.net/ArticlePics/TinyWebDB_SAE_PHP/step3.png)  
 
-在新建的版本中，找到上传代码包，导入 **[完整安装文件](TinyWebDB_SAE_PHP-1)**  
+在新建的版本中，找到上传代码包，导入 **[完整安装文件](http://www.source-space.cn/article/TinyWebDB_SAE_PHP-1)**  
 zip包内容：（如不是新创建的应用请慎重导入）
 * /config.yaml
 * /php/tinywebdb.php
