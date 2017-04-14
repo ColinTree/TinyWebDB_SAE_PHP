@@ -1,0 +1,6 @@
+handle:
+- rewrite: if(path=="/tinywebdb")goto "/php/tinywebdb.php [L]"
+- rewrite: if(path=="/tinywebdb/")goto "/php/tinywebdb.php [L]"
+- rewrite: if(path=="/tinywebdb/manage")goto "/php/tinywebdbMANAGE.php [L]"
+- rewrite: if(path=="/tinywebdb/storeavalue")goto "/php/tinywebdb.php?do=storeavalue [L]"
+- rewrite: if(path=="/tinywebdb/getvalue")goto "/php/tinywebdb.php?do=getvalue [L]"
