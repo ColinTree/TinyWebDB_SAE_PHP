@@ -89,7 +89,7 @@ if(isset($_POST['setting_type'])){
                     </div>
                     <p style="margin:0;margin-top:20px;"></p>
                     <div>
-                        <span class="control-label">批量获取数据库的标签和值(此标签不要包含#)：</span>
+                        <span class="control-label">批量获取数据库的标签和值（一次性获取多个标签的值）(此标签不要包含#)：</span>
                         <input type="text" class="form-control" name="listget" autocomplete="off" value="<? echo htmlspecialchars($kv->get('tinywebdbMANAGE_special_tags_listget')); ?>" placeholder="<? echo $listgetSettingDefault; ?>" oninput="changeSetting(this.value,'<? echo $listgetSettingDefault; ?>','special_tags_listget')"/>
                         <div style="margin-left:5px;">
                             使用方法：请求获取标签“<span id="special_tags_listget"><? $mgetSetting=$kv->get('tinywebdbMANAGE_special_tags_listget');echo(empty($listgetSetting)?$listgetSettingDefault:htmlspecialchars($listgetSetting)); ?></span>[#标签1][#标签2][……]”

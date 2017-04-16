@@ -1,8 +1,9 @@
 <?
-define('MANAGEversion','201704161');
+define('MANAGEversion','201704162');
 define('prefix','tinywebdb_');
 $countSettingDefault='special_count';
 $mgetSettingDefault='special_mget';
+$listgetSettingDefault='special_listget';
 $searchSettingDefault='special_search';
 
 $kv=new SaeKV();
@@ -25,9 +26,11 @@ if(isset($_REQUEST['do'])){
         if(count($tmparray)>1){$queryParam=$tmparray[1];}
         $countSetting=$kv->get('tinywebdbMANAGE_special_tags_count');if(empty($countSetting)){$countSetting=$countSettingDefault;}
         $mgetSetting=$kv->get('tinywebdbMANAGE_special_tags_mget');if(empty($mgetSetting)){$mgetSetting=$mgetSettingDefault;}
+        $listgetSetting=$kv->get('tinywebdbMANAGE_special_tags_listget');if(empty($listgetSetting)){$listgetSetting=$listgetSettingDefault;}
         $searchSetting=$kv->get('tinywebdbMANAGE_special_tags_search');if(empty($searchSetting)){$searchSetting=$searchSettingDefault;}
         if($queryFunction==$countSetting){$countOfTags=0;$ret=$kv->pkrget(prefix.$queryParam,100);while(true){end($ret);$start_key=key($ret);$countOfTags+=count($ret);if(count($ret)<100)break;$ret=$kv->pkrget(prefix.$queryParam,100,$start_key);}exit(json_encode(['VALUE',$_REQUEST['tag'],$countOfTags]));}
         elseif($queryFunction==$mgetSetting){$ReturnTags=[];$ret=$kv->pkrget(prefix.$queryParam,100);while(true){end($ret);$start_key=key($ret);foreach($ret as $tag=>$value){$ReturnTags[]=[substr($tag,strlen(prefix)),$value];}if(count($ret)<100)break;$ret=$kv->pkrget(prefix.$queryParam,100,$start_key);}exit(json_encode(['VALUE',$_REQUEST['tag'],$ReturnTags]));}
+        elseif($queryFunction==$listgetSetting){$ReturnTags=[];$paramArray=explode('#',$queryParam);$paramArray=array_unique($paramArray);foreach($paramArray as $tag){$ReturnTags[]=[$tag,''.$kv->get(prefix.$tag)];}exit(json_encode(['VALUE',$_REQUEST['tag'],$ReturnTags]));}
         elseif($queryFunction==$searchSetting){$ReturnTags=[];$paramArray=explode('#',$queryParam,2);if(count($paramArray)>1){$paramPrefix=''.$paramArray[1];}else{$paramPrefix='';}$paramKeyWord=''.$paramArray[0];$ret=$kv->pkrget(prefix.$paramPrefix,100);while(true){end($ret);$start_key=key($ret);foreach($ret as $tag=>$value){if($paramKeyWord==''||strpos(substr($tag,strlen(prefix)),$paramKeyWord)!==false||strpos($value,$paramKeyWord)!==false){$ReturnTags[]=[substr($tag,strlen(prefix)),$value];}}if(count($ret)<100)break;$ret=$kv->pkrget(prefix.$paramPrefix,100,$start_key);}exit(json_encode(['VALUE',$_REQUEST['tag'],$ReturnTags]));}
         else{exit(json_encode(['VALUE',$_REQUEST['tag'],''.$kv->get(prefix.$_REQUEST['tag'])]));}
     }
