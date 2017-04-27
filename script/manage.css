@@ -1,4 +1,4 @@
-body{margin:0;font-family:"Microsoft YaHei","微软雅黑",Serif}
+html,body{margin:0;font-family:"Microsoft YaHei","微软雅黑",Serif}
 h3{font-family:"Microsoft YaHei","微软雅黑",Serif}
 .btn{margin:3px}
 .input-group .btn{margin-top:0;margin-bottom:0;margin-right:0}
@@ -11,3 +11,8 @@ h3{font-family:"Microsoft YaHei","微软雅黑",Serif}
 #header .btn-group{width:730px;margin-left:20px;height:100%}
 pre{white-space:pre-wrap}
 .tinywebdb-value{color:#aaa;width:550px;height:1.6em;overflow:hidden;word-break:break-all;}
+input[tinywebdb_key]{margin-top:17px;}
+#all_toolbar_frame{position:fixed;left:50%;top:100px;width:80px;height:150px;margin-left:-550px;padding:18px 0;}
+#all_toolbar_delete{margin-top:8px;}
+#all_processing_background{width:100%;height:100%;position:fixed;left:0;top:0;z-index:100;background-color:rgba(0,0,0,0.5);}
+#all_processing_background>div{width:300px;height:150px;position:fixed;left:50%;top:50%;margin-left:-150px;margin-top:-75px;z-index:101;padding:20px;}

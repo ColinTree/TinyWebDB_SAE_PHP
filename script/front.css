@@ -1,0 +1,9 @@
+html,body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+#content{margin-top:80px;margin-bottom:80px;position:absolute;left:25%;width:50%;background-color:#eee;padding:100px 20px;}
+#content_title{font-weight:bold;font-size:120%;margin-top:-50px;}
+#content_subtitle{margin:4px 0;}
+label{float:right;font-size:90%;}
+input[type="text"]{width:100%;padding:2px;}
+#getvalue_value,#storeavalue_status{width:100%;display:block;background-color:lightgray;padding:2px;}
+#manage_link{color:black}
+#signature{float:right;font-size:60%;color:#bbb;}

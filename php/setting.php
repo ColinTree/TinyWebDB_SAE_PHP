@@ -143,7 +143,7 @@ if(isset($_POST['setting_type'])){
                         <input type="password" class="form-control" name="new_pwd" oninput="changePasswordOnInput(this)" autocomplete="off"/>
                         <span class="help-block"><? echo(isset($setting_notice_change_pwd_new)?$setting_notice_change_pwd_new:'');?></span>
                     </div>
-                    <p><input type="submit" value="保存" class="btn btn-default" onclick="return checkChangePassword(this)"/><? if($_POST['setting_type']=='change_password')echo'已保存'; ?></p>
+                    <p><input type="submit" value="保存" class="btn btn-default" onclick="return checkChangePassword(this)"/><? if($_POST['setting_type']=='change_password' && !isset($setting_notice_change_pwd_old) && !isset($setting_notice_change_pwd_new))echo'已保存'; ?></p>
                 </form>
             </li>
             <hr style="margin-left:-14px"/>
