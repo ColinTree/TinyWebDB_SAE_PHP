@@ -3,7 +3,7 @@ define('MANAGEversion','201704291');
 define('prefix','tinywebdb_');
 
 @error_reporting(E_ALL &~ E_NOTICE);@set_time_limit(0);date_default_timezone_set('PRC');if(!isset($_SERVER['PHP_SELF'])||empty($_SERVER['PHP_SELF']))$_SERVER['PHP_SELF']=$_SERVER['SCRIPT_NAME'];header('Content-type:text/html;charset=utf-8');$kv=new SaeKV();$password=$kv->get('tinywebdbMANAGE_password');if($password==''&&$_REQUEST['a']!='init'){exit('<script>window.location.href="?a=init"</script>');}define('PWD',md5($password));session_start();
-$cookiepwd=isset($_SESSION['tinywebdbmanage'])?$_SESSION['tinywebdbmanage']:'';$kv=new SaeKV();$kv->init();$a=isset($_REQUEST['a'])?$_REQUEST['a']:'index';if(isset($_REQUEST['k']))$k=($_REQUEST['k']);$v=isset($_REQUEST['v'])?($_REQUEST['v']):'';
+$cookiepwd=isset($_SESSION['tinywebdbmanage'])?$_SESSION['tinywebdbmanage']:'';$kv=new SaeKV();$kv->init();$a=isset($_REQUEST['a'])?$_REQUEST['a']:'index';if(isset($_REQUEST['k']))$k=($_REQUEST['k']);if(isset($_REQUEST['v']))$v=$_REQUEST['v'];
 
 function check_login(){global $cookiepwd;if($cookiepwd!=PWD)exit('<script>window.location.href="?a=index"</script>');}
 function urlencode_plus($s){
