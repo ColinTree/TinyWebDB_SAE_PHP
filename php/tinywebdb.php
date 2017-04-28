@@ -1,5 +1,5 @@
 <?
-define('MANAGEversion','201704281');
+define('MANAGEversion','201704291');
 define('prefix','tinywebdb_');
 $countSettingDefault='special_count';
 $mgetSettingDefault='special_mget';
