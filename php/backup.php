@@ -17,7 +17,6 @@ class backup{
     public $appid;
     public $ex;
     public $filename;
-    private $kv;
     public function __construct($ex,$appid=''){
         $this->appid=$appid;
         $this->ex=$ex;
@@ -25,18 +24,9 @@ class backup{
         if($ex!=''){
             $this->fileName=$this->fileName.'-'.$ex;
         }
-        $this->kv=new SaeKV();
-        $this->kv->init($this->appid);
     }
     public function findByKVDB(){
-        $ret=$this->kv->pkrget(prefix.$this->ex,100);
-        while(true){
-            foreach($ret as $k=>$v)$results[substr($k,strlen(prefix))]=$v;
-            end($ret);$start_key=key($ret);
-            $i=count($ret);if($i<100)break;
-            $ret=$this->kv->pkrget(prefix.$ex,100,$start_key);
-        }
-        return $results;
+        return db::getall($ex);
     }
     public function toExtJson(){
         header('Content-Type: text/json');header('Content-Disposition: attachment; filename="'.$this->fileName.'.json"');
@@ -61,8 +51,8 @@ class backup{
         exit;
     }
     public function toExcel(){
-        $ExcelStoreToStorage=$this->kv->get('tinywebdbMANAGE_backup_excel_store_to_storage')=='on';
-        $ExcelAutoWidth=$this->kv->get('tinywebdbMANAGE_backup_excel_auto_width')=='on';
+        $ExcelStoreToStorage=setting::get('backup_excel_store_to_storage')=='on';
+        $ExcelAutoWidth=setting::get('backup_excel_auto_width')=='on';
         
         if($ExcelStoreToStorage){
             $s=new Storage;
@@ -93,7 +83,7 @@ class backup{
     public function jsonToKVDB($fileName){
         $json=file_get_contents($fileName);
         $results=json_decode($json,true);
-        foreach($results as $k=>$v)$this->kv->set(prefix.$k,$v);
+        foreach($results as $k=>$v)db::set($k,$v);
         exit('恢复完成！');
     }
     public function excelToKVDB($fileName){
@@ -110,8 +100,8 @@ class backup{
         $currentSheet=$PHPExcel->getSheet(0);
         $allRow=$currentSheet->getHighestRow();
         for($currentRow=2;$currentRow<=$allRow;$currentRow++){
-            $this->kv->set(
-                prefix.$currentSheet->getCellByColumnAndRow(0,$currentRow)->getValue(),
+            db::set(
+                $currentSheet->getCellByColumnAndRow(0,$currentRow)->getValue(),
                 $currentSheet->getCellByColumnAndRow(1,$currentRow)->getValue()
             );
         }

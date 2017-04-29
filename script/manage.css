@@ -1,4 +1,6 @@
 html,body{margin:0;font-family:"Microsoft YaHei","微软雅黑",Serif}
+select{appearance:none;-moz-appearance:none;-webkit-appearance:none;background:url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;padding-right:14px;}
+select::-ms-expand { display: none; }/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
 h3{font-family:"Microsoft YaHei","微软雅黑",Serif}
 .btn{margin:3px}
 .input-group .btn{margin-top:0;margin-bottom:0;margin-right:0}
@@ -10,9 +12,32 @@ h3{font-family:"Microsoft YaHei","微软雅黑",Serif}
 #title>a:hover{text-decoration:underline}
 #header .btn-group{width:730px;margin-left:20px;height:100%}
 pre{white-space:pre-wrap}
+/* all */
+#all_search_form{float:right;width:215px;display:inline-block;margin-right:-10px;margin-top:-4px;}
+#all_search_form input,#all_search_form button{height:26px;padding:6px 8px;}
+#all_search_form input{border-right:0;-webkit-box-shadow:none;box-shadow:none;font-size:smaller;color:#333;padding-left:8px;}
+#all_search_form input:focus,#all_search_form button:active{border-color:#ccc;-webkit-box-shadow:none;box-shadow:none;}
+#all_search_form button{border-left:0}
+#all_search_form button:hover,#all_search_form button:focus{outline:0;background-color:#fff;border-color:#ccc;}
+#all_search_form button span:before{color:#6d6d6d;transition: color 200ms;}
+#all_search_form button:hover span:before{color:#000;}
 .tinywebdb-value{color:#aaa;width:550px;height:1.6em;overflow:hidden;word-break:break-all;}
-input[tinywebdb_key]{margin-top:17px;}
+input[tinywebdb_key]{margin-top:17px;cursor:pointer}
 #all_toolbar_frame{position:fixed;left:50%;top:100px;width:80px;height:150px;margin-left:-550px;padding:18px 0;}
 #all_toolbar_delete{margin-top:8px;}
 #all_processing_background{width:100%;height:100%;position:fixed;left:0;top:0;z-index:100;background-color:rgba(0,0,0,0.5);}
 #all_processing_background>div{width:300px;height:150px;position:fixed;left:50%;top:50%;margin-left:-150px;margin-top:-75px;z-index:101;padding:20px;}
+#all_category{background-color:transparent;border:0;}
+/* setting */
+#setting_expand{color:#aaa;text-decoration:none;}
+#setting_expand:hover{color:#888;text-decoration:underline;cursor:pointer}
+#setting_ol{list-style-type:none;padding-left:14px;}
+#setting_ol>hr{margin-left:-14px}
+#setting_ol>li>p[id]{cursor:pointer;margin-left:-14px;font-weight:bold}
+/* search */
+#search_form div.panel{border-top-left-radius:0;border-top-right-radius:0;}
+#search_form div.panel div.panel-heading{border:none;overflow:hidden;padding:6px 12px;transition:all 200ms;-webkit-transition:all 200ms;}
+#search_form div.input-group input{border-bottom-left-radius:0;border-bottom-right-radius:0;}
+#search_form div.input-group input[type=submit]{height:34px;}
+#search_filter_controler{cursor:pointer;}
+#search_filter_controler span{transform:rotate(180deg);transition:transform 200ms;background:url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;width:17px;height:10px;display:inline-block;}
