@@ -1,1 +1,1 @@
-<? interface PHPExcel_Reader_IReadFilter { public function readCell($column, $row, $worksheetName = ''); } 
+<?interface PHPExcel_Reader_IReadFilter{public function readCell($column,$row,$worksheetName='');}

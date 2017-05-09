@@ -1,1 +1,1 @@
-<? interface PHPExcel_IComparable { public function getHashCode(); } 
+<? interface PHPExcel_IComparable{public function getHashCode();}

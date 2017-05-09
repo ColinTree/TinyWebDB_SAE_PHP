@@ -1,5 +1,5 @@
 <?
-if(!defined('MANAGEversion')){header("HTTP/1.0 404 Not Found");exit("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /php/backup.php was not found on this server.</p>\n</body></html>\n");}
+if(!defined('MANAGEversion')){http_response_code(404);exit("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /php/backup.php was not found on this server.</p>\n</body></html>\n");}
 
 $backup=new backup($_REQUEST['ex']);
 switch($_REQUEST['type']){
@@ -10,7 +10,34 @@ switch($_REQUEST['type']){
     case'jsonUp': $backup->jsonToKVDB($_FILES['upFile']['tmp_name']); break;
     case'excelUp':$backup->excelToKVDB($_FILES['upFile']['tmp_name']); break;
 }
-?><div id="main"><div class="panel panel-default"><div class="panel-heading"><div class="panel-title">备份/恢复</div></div><div class="panel-body"><pre>======数据库备份======<form name="readform" action="" method="get"><input type="hidden" name="a" value="backup"/><input type="hidden" name="noecho" value="true"/>导出类型：<select name="type" class="form-control"><option value="Json">Json</option><option value="Xml">Xml</option><option value="CSV">CSV</option><option value="Excel">Excel</option></select>key前缀：<input type="text" class="form-control" name="ex" /><input type="submit" class="btn btn-default" value="备份" /></form>======数据库恢复======<form name="sendform" action="?a=backup&type=jsonUp" method="post" enctype="multipart/form-data">导入文件(.JSON格式)：<input type="file" accept="application/json" class="form-control" name="upFile" id="file"/><input type="submit" class="btn btn-default" value="恢复"/></form><form name="sendform" action="?a=backup&type=excelUp" method="post" enctype="multipart/form-data">导入文件(.xls .xlsx格式)：<input type="file" accept=".xls, .xlsx" class="form-control" name="upFile" id="file"/>读取格式：读取文件中的第一个表，并忽略第一行，其余读取每一行的第一格作为标签，第二格为值<br>样例：参考导出Excel的格式<br><input type="submit" class="btn btn-default" value="恢复"/></form></pre></div></div></div><div style="color:#bbb;padding-left:10px;font-size:80%">Backup/Restore By Cp0204 @ <a target="_blank" style="color:#bbb;text-decoration:underline" href="http://saebbs.com/forum.php?mod=viewthread&tid=3637">saebbs.com</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modify&amp;Merge By ColinTree @ <a target="_blank" style="color:#bbb;text-decoration:underline" href="http://www.colintree.cn">colintree.cn</a></div><?
+?>
+<div id="main">
+    <div class="panel panel-default">
+        <div class="panel-heading"><div class="panel-title">备份/恢复</div></div>
+        <div class="panel-body">
+            <span style="font-size:15.5px;"><b>数据库备份</b></span>
+            <hr style="margin-top:10px;margin-bottom:15px;">
+            <form name="readform" action="" method="get" style="margin:10px">
+                <input type="hidden" name="a" value="backup"/><input type="hidden" name="noecho" value="true"/>
+                <p>导出类型：<select name="type" class="form-control"><option value="Json">Json</option><option value="Xml">Xml</option><option value="CSV">CSV</option><option value="Excel">Excel</option></select></p>
+                <p>key前缀：<input type="text" class="form-control" name="ex" /></p>
+                <input type="submit" class="btn btn-default" value="备份" />
+            </form>
+            <br>
+            <span style="font-size:15.5px;"><b>数据库恢复</b></span>
+            <hr style="margin-top:10px;margin-bottom:15px;">
+            <form name="sendform" action="?a=backup&type=jsonUp" method="post" enctype="multipart/form-data" style="margin:10px">
+                <p>导入文件(.JSON格式)：<input type="file" accept="application/json" class="form-control" name="upFile" id="file"/></p>
+                <input type="submit" class="btn btn-default" value="恢复"/>
+            </form>
+            <form name="sendform" action="?a=backup&type=excelUp" method="post" enctype="multipart/form-data" style="margin:10px">
+                <p>导入文件(.xls .xlsx格式)：<input type="file" accept=".xls, .xlsx" class="form-control" name="upFile" id="file"/>读取格式：读取文件中的第一个表，并忽略第一行，其余读取每一行的第一格作为标签，第二格为值<br>样例：参考导出Excel的格式</p>
+                <input type="submit" class="btn btn-default" value="恢复"/>
+            </form>
+        </div>
+    </div>
+</div>
+<div style="color:#bbb;padding-left:10px;font-size:80%">Backup/Restore By Cp0204 @ <a target="_blank" style="color:#bbb;text-decoration:underline" href="http://saebbs.com/forum.php?mod=viewthread&tid=3637">saebbs.com</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Modify&amp;Merge By ColinTree @ <a target="_blank" style="color:#bbb;text-decoration:underline" href="http://www.colintree.cn">colintree.cn</a></div><?
 
 use sinacloud\sae\Storage as Storage;
 class backup{
@@ -26,7 +53,7 @@ class backup{
         }
     }
     public function findByKVDB(){
-        return db::getall($ex);
+        return db::getall($this->ex);
     }
     public function toExtJson(){
         header('Content-Type: text/json');header('Content-Disposition: attachment; filename="'.$this->fileName.'.json"');

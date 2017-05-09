@@ -1,5 +1,5 @@
 <?
-if(!defined('MANAGEversion')){header("HTTP/1.0 404 Not Found");exit("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /php/setting.php was not found on this server.</p>\n</body></html>\n");}
+if(!defined('MANAGEversion')){http_response_code(404);exit("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /php/setting.php was not found on this server.</p>\n</body></html>\n");}
 
 $countSettingDefault='special_count';
 $mgetSettingDefault='special_mget';
@@ -17,6 +17,7 @@ if(isset($_POST['setting_type'])){
     }
     // backup
     if($_POST['setting_type']=='backup'){
+        // TODO: add one that is the download file name.
         setting::set('backup_excel_store_to_storage',$_REQUEST['excel_store_to_storage']);
         setting::set('backup_excel_auto_width',$_REQUEST['excel_auto_width']);
     }
@@ -92,12 +93,8 @@ if(isset($_POST['setting_type'])){
             <li<? echo($_POST['setting_type']=='security'?'':' style="display:none"');?> id="security_li">
                 <form action="?a=setting#security" method="post">
                     <input type="hidden" name="setting_type" value="security"/>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="allow_front"<? if(setting::get('allow_front')=="on")echo"checked";?>/>允许可视化操作页面</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="allow_browser"<? if(setting::get('allow_browser')=="on")echo"checked";?>/>允许来自浏览器对数据库的访问</label>
-                    </div>
+                    <div class="checkbox"><label><input type="checkbox" name="allow_front"<? if(setting::get('allow_front')=="on")echo"checked";?>/>允许可视化操作页面</label></div>
+                    <div class="checkbox"><label><input type="checkbox" name="allow_browser"<? if(setting::get('allow_browser')=="on")echo"checked";?>/>允许来自浏览器对数据库的访问</label></div>
                     <span>说明：本功能对于数据防修改能力较弱，仅做简单的浏览器级别防御，请不要过度依赖</span>
                     <p><input type="submit" value="保存" class="btn btn-default"/><? if($_POST["setting_type"]=="security")echo'已保存'; ?></p>
                 </form>
@@ -152,12 +149,8 @@ if(isset($_POST['setting_type'])){
             <li<? echo($_POST['setting_type']=='backup'?'':' style="display:none"');?> id="backup_li">
                 <form action="?a=setting#backup" method="post">
                     <input type="hidden" name="setting_type" value="backup"/>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="excel_store_to_storage"<? if(setting::get('backup_excel_store_to_storage')=='on')echo'checked';?>/>导出的excel表自动存档备份至Storage</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="excel_auto_width"<? if(setting::get('backup_excel_auto_width')=='on')echo'checked';?>/>导出Excel表自动调整列宽</label>
-                    </div>
+                    <div class="checkbox"><label><input type="checkbox" name="excel_store_to_storage"<? if(setting::get('backup_excel_store_to_storage')=='on')echo'checked';?>/>导出的excel表自动存档备份至Storage</label></div>
+                    <div class="checkbox"><label><input type="checkbox" name="excel_auto_width"<? if(setting::get('backup_excel_auto_width')=='on')echo'checked';?>/>导出Excel表自动调整列宽</label></div>
                     <p><input type="submit" value="保存" class="btn btn-default"/><? if($_POST['setting_type']=='backup')echo'已保存'; ?></p>
                 </form>
             </li>
