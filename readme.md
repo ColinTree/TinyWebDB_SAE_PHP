@@ -20,7 +20,10 @@
   大量实用后台管理功能
 
 下载：
-[点此跳转](https://github.com/ColinTree/TinyWebDB_SAE_PHP/wiki/%E4%B8%8B%E8%BD%BD%E9%A1%B5)
+[点此跳转](下载页)
 
 安装：
-[点此跳转](https://github.com/ColinTree/TinyWebDB_SAE_PHP/wiki/%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95---%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
+[点此跳转](安装方法)
+
+使用教程：
+[点此跳转](使用方法---功能介绍)
