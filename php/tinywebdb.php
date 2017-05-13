@@ -1,5 +1,5 @@
 <?
-define('MANAGEversion','201705131');
+define('MANAGEversion','201705091');
 require_once('class/db.php');
 
 $getSettingDefault='special_getSetting';
@@ -14,24 +14,8 @@ if(isset($_REQUEST['do'])){
         $fd=file_get_contents('php://input');
         $fd=$fd ? $fd : $GLOBALS['HTTP_RAW_POST_DATA'];
         $fn=empty($_GET['filename']) ? md5($_SERVER['REQUEST_TIME'].'') : $_GET['filename'];
-        $auth=kvfile::auth($fn);
-        if($auth===false || ($auth!='wr' && $auth!='rw' && $auth!='w')){
-            http_response_code(401);
-            exit('无权限上传/写入'.$fn);
-        }
-        $tmpfn=kvfile::formatFN($fn);
-        while(strlen($tmpfn)>1){
-            while(substr($tmpfn,-1)!='/'){ $tmpfn=substr($tmpfn,0,strlen($tmpfn)-1); }
-            $auth=kvfile::auth($tmpfn);
-            if($auth!='wr'&&$auth!='rw'&&$auth!='w'){
-                http_response_code(401);
-                exit('无权限上传/写入'.htmlspecialchars($tmpfn).'下的文件');
-            }else{
-                $tmpfn=substr($tmpfn,0,strlen($tmpfn)-1);
-            }
-        }
         if(!empty($fd)){
-            if($do=='file'||$do=='addfile'){
+            if($do=='file' || $do=='addfile'){
                 $rst=kvfile::create($fn,$fd);
             }elseif($do=='savefile'){
                 $rst=kvfile::save($fn,$fd);
@@ -43,51 +27,28 @@ if(isset($_REQUEST['do'])){
         exit;
     }
     if($do=='getfile'){
-        $filepath=$_GET['filename'];
-        if(empty($filepath)){
-            http_response_code(404);
-            exit('文件名为空');
+        if(empty($_GET['filename'])){
+            exit;
         }else{
-            if(substr($filepath,-1)=='/'){
-                http_response_code(401);
-                exit('无法访问目录');
-            }else{
-                $auth=kvfile::auth($filepath);
-                if($auth===false || ($auth!='wr' && $auth!='rw' && $auth!='r')){
-                    http_response_code(401);
-                    exit('无权限访问'.htmlspecialchars($filepath));
-                }
-                $tmpfn=kvfile::formatFN($filepath);
-                while(strlen($tmpfn)>1){
-                    while(substr($tmpfn,-1)!='/'){ $tmpfn=substr($tmpfn,0,strlen($tmpfn)-1); }
-                    $auth=kvfile::auth($tmpfn);
-                    if($auth!='wr'&&$auth!='rw'&&$auth!='r'){
-                        http_response_code(401);
-                        exit('无权限访问'.htmlspecialchars($tmpfn).'下的文件');
-                    }else{
-                        $tmpfn=substr($tmpfn,0,strlen($tmpfn)-1);
-                    }
-                }
-                $rst=kvfile::read($filepath);
-                if($rst!==false){
-                    $fn=kvfile::getfn($filepath);
-                    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-                    header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-                    header('Cache-Control: no-store, no-cache, must-revalidate');
-                    header('Cache-Control: post-check=0, pre-check=0', false );
-                    header('Pragma: no-cache');
-                    header('Content-Type: '.kvfile::getmime($rst));
-                    header("Content-Length: ". kvfile::getsize($filepath));
+            $filepath=$_GET['filename'];
+            $rst=kvfile::read($filepath);
+            if($rst!==false){
+                $fn=kvfile::getfn($filepath);
+                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+                header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+                header('Cache-Control: no-store, no-cache, must-revalidate');
+                header('Cache-Control: post-check=0, pre-check=0', false );
+                header('Pragma: no-cache');
+                header('Content-Type: '.kvfile::getmime($rst));
+                header("Content-Length: ". kvfile::getsize($filepath));
                     if(strtolower($_SERVER['REQUEST_METHOD'])!='head'){
-                        if(!isset($_GET['nodownload'])){
-                            header('Content-Disposition: attachment; filename*="utf8\'\''.urlencode($fn).'"');
-                        }
-                        exit($rst);
+                    if(!isset($_GET['nodownload'])){
+                        header('Content-Disposition: attachment; filename*="utf8\'\''.urlencode($fn).'"');
                     }
-                }else{
-                    http_response_code(404);
-                    exit('文件不存在或无权限');
+                    exit($rst);
                 }
+            }else{
+                exit(http_response_code(404));
             }
         }
     }
