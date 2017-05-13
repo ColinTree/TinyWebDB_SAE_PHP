@@ -23,7 +23,8 @@ pre.line-number ol a::before{background-color:#e5e5e5;content:counter(li);width:
 #tag_edit_background,
 #myconfirm_background,
 #file_preview_background,
-#file_upload_background{width:100%;height:100%;position:fixed;left:0;top:0;z-index:100;background-color:rgba(0,0,0,0.5);}
+#file_upload_background,
+#file_auth_background{width:100%;height:100%;position:fixed;left:0;top:0;z-index:100;background-color:rgba(0,0,0,0.5);}
 #all_processing_background>div{width:300px;height:150px;position:fixed;left:50%;top:50%;margin-left:-150px;margin-top:-75px;z-index:101;padding:20px;}
 #tag_show_background>div,
 #tag_edit_background>div,
@@ -34,32 +35,43 @@ pre.line-number ol a::before{background-color:#e5e5e5;content:counter(li);width:
 #tag_edit_background div[class*=heading],
 #myconfirm_background div[class*=heading],
 #file_preview_background div[class*=heading],
-#file_upload_background div[class*=heading]{cursor:pointer;}
+#file_upload_background div[class*=heading],
+#file_auth_background div[class*=heading]{cursor:pointer;}
 #tag_show_background div[class*=heading]>h3,
 #tag_edit_background div[class*=heading]>h3,
 #myconfirm_background div[class*=heading]>h3,
 #file_preview_background div[class*=heading]>h3,
-#file_upload_background div[class*=heading]>h3{display:inline-block;}
+#file_upload_background div[class*=heading]>h3,
+#file_auth_background div[class*=heading]>h3{display:inline-block;}
 #tag_show_background div[class*=heading]>div,
 #tag_edit_background div[class*=heading]>div,
 #myconfirm_background div[class*=heading]>div,
 #file_preview_background div[class*=heading]>div,
-#file_upload_background div[class*=heading]>div{display:inline-block;float:right;padding-top:2px;padding-right:-2px;cursor:default;}
+#file_upload_background div[class*=heading]>div,
+#file_auth_background div[class*=heading]>div{display:inline-block;float:right;padding-top:2px;padding-right:-2px;cursor:default;}
 #tag_show_background div[class*=heading]>div span,
 #tag_edit_background div[class*=heading]>div span,
 #file_preview_background div[class*=heading]>div span,
-#file_upload_background div[class*=heading]>div span{cursor:pointer;}
+#file_upload_background div[class*=heading]>div span,
+#file_auth_background div[class*=heading]>div span{cursor:pointer;}
 #tag_show_background div[class*=body],
 #tag_edit_background div[class*=body],
 #myconfirm_background div[class*=body],
 #file_preview_background div[class*=body],
-#file_upload_background div[class*=body]{padding:20px 25px;}
+#file_upload_background div[class*=body],
+#file_auth_background div[class*=body]{padding:20px 25px;}
 #tag_show_background pre{height:300px;}
+#file_auth_background button{color:white !important;transition:all 200ms;}
+#file_auth_background #file_auth_loading{color:black;display:none;}
+#file_auth_background.loading #file_auth_loading{display:block;}
+#file_auth_background.loading [class*=body] *{color:gray;cursor:default;}
+#file_auth_background.loading [class*=body] input[type=checkbox]{pointer-events:none;}
 /* tag edit */
 #tag_edit_background textarea{resize:none;height:260px;}
 #tag_edit_background [button-task=edit-tag-submit]{transition:all 0.2s;-webkit-transition:all 0.2s;-moz-transition:all 0.2s;-o-transition:background-color 0.1s;}
 /* myconfirm */
-#myconfirm_background>div{width:500px;height:234px;position:fixed;left:50%;top:50%;margin-left:-250px;margin-top:-117px;z-index:101;}
+#myconfirm_background>div,
+#file_auth_background>div{width:500px;height:234px;position:fixed;left:50%;top:50%;margin-left:-250px;margin-top:-117px;z-index:101;}
 #myconfirm_msg{margin:20px 0 49px 0;font-size:17px;}
 #myconfirm_ok,#myconfirm_cancel{margin-left:20px;margin-right:20px;padding:9px 26px;}
 /* file show */

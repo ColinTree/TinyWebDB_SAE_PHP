@@ -80,8 +80,8 @@ $(document).ready(function(){
     //file - tr.click (locale from dir)
     .parent().parent().click(function(){
         $(this).find('[kvfile-open-dir]').click();
-    })
-    
+    });
+
     //file - buttons
     $('#file_upload_div>button').click(function(){
         $('#file_upload_background').fadeIn(200);
@@ -90,13 +90,66 @@ $(document).ready(function(){
         location.href='?a=file&dir='+escape($(this).parent().prev().children('a').attr('kvfile-dirpath'));
         return false;
     });
+    $('[kvfile-dir-auth],[kvfile-file-auth]').click(function(){
+        var filepath=$(this).parent().prev().children('a').attr('kvfile-'+($(this).is('[kvfile-dir-auth]') ? 'dir' : 'file')+'path');
+        $('#file_auth_background').fadeIn(200).attr('kvfile-filepath',filepath).addClass('loading')
+            .children('div[class*=panel-default]').css('left','50%').css('top','50%')
+            .parent().find('input,button').prop('disabled',true);
+        $('#file_auth_background [class*=heading] h3').text('设置'+($(this).is('[kvfile-dir-auth]') ? '目录' : '文件')+'权限');
+        $.ajax({
+            type:"post",
+            async:true,
+            url:'?a=file-getauth',
+            data:{'noecho':true,'filepath':filepath}
+        }).done(function(response){
+            if(response.status===true){
+                $('#file_auth_write').prop('checked',response.auth=='wr'||response.auth=='rw'||response.auth=='w');
+                $('#file_auth_read').prop('checked',response.auth=='wr'||response.auth=='rw'||response.auth=='r');
+                $('#file_auth_background').removeClass('loading')
+                    .find('input,button').prop('disabled',false);
+            }else{
+                alertify.error('加载失败');
+            }
+        }).fail(function(){
+            alertify.error('加载失败');
+        });
+        return false;
+    });
+    $('#file_auth_write, #file_auth_read').click(function(e){
+        e.stopPropagation();
+    }).parent().click(function(e){
+        $(this).children('input').prop('checked', !$('#file_auth_background').hasClass('loading') && !$(this).children('input').prop('checked')===true);
+    });
+    $('#file_auth_background button').click(function(){
+        var filepath=$(this).parent().parent().parent().parent().attr('kvfile-'+($(this).is('[kvfile-dir-auth]') ? 'dir' : 'file')+'path');
+        $(this).text('保存中……').prop('disabled',true);
+        $.ajax({
+            type:"post",
+            async:true,
+            url:'?a=file-setauth',
+            data:{'noecho':true,'filepath':filepath,'auth':''+($('#file_auth_write').prop('checked')===true ? 'w' : '')+($('#file_auth_read').prop('checked')===true ? 'r' : '')}
+        }).done(function(response){
+            if(response.status===true){
+                $('#file_auth_background button').text('保存成功').prop('disabled',false).removeClass('btn-primary').addClass('btn-success');
+                setTimeout(function(){$('#file_auth_background button').text('保存').addClass('btn-primary').removeClass('btn-success');},1500);
+            }else{
+                alertify.error('保存失败');
+                $('#file_auth_background button').prop('disabled',false);
+            }
+        }).fail(function(){
+            alertify.error('加载失败');
+            $('#file_auth_background button').prop('disabled',false);
+        });
+    });
     $('[kvfile-show-file]').click(function(){
         $('#file_preview_background').fadeIn(200).off('click').click(function(){$(this).find('span.glyphicon-remove').click();})
             .children().click(function(){return false;}) // window.click ignore the click event of background's
             .find('[file-loading]').show()
             .next().hide()
             .next().hide();
-        var filepath='file'+$(this).parent().prev().children('a').attr('kvfile-filepath');
+        $('#file_preview_background')
+            .children('div[class*=panel-default]').css('left','50%').css('top','50%');
+        var filepath='?a=file-get&noecho=true&filename='+encodeURI($(this).parent().prev().children('a').attr('kvfile-filepath'));
         var ct=$(this).parent().parent().find('[kvfile-filesize]').text(); //content-type showed(some in chinese)
         if(ct.match(/图片/)){
             $('#file_preview_background [file-loading]')
@@ -106,13 +159,15 @@ $(document).ready(function(){
             $.ajax({
                 type:"GET",
                 async:true,
-                url:filepath,
-                data:{'nodownload':'true'}
+                url:filepath
             }).done(function(message){
                 $('#file_preview_background [file-loading]').hide()
                     .next().hide()
                     .next().show().text(message);
                 lineNumber($('#file_preview_background [file-loading]').next().next());
+            }).fail(function(){
+                alertify.error('获取文件内容失败');
+                $('#file_preview_background').fadeOut(200)
             });
         }else{
             $('#file_preview_background [file-loading]').hide()
@@ -287,7 +342,7 @@ $(document).ready(function(){
             $('div[id*=_background] span.glyphicon-remove').not('#file_upload_background *').parent().click();
         }
     });
-    $('div[id*=tag_]').filter('[id*=_background]').click(function(e){
+    $('div[id*=_background]').filter('[id*=tag_],[id*=file_]').not('#file_upload_background').click(function(e){
         $(this).find('span.glyphicon-remove').parent().click();
     }).children('div').click(function(){
         return false;
