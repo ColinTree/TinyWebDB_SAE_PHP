@@ -23,4 +23,4 @@
   
 ***
   
-By Colintree @ colintree.cn (Email: 502470184@qq.com || colinycl123@gmail.com)
+By Colintree @ colintree.cn (Email: 502470184@qq.com \|\| colinycl123@gmail.com)
