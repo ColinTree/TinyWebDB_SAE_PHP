@@ -1,5 +1,5 @@
 <?
-define('MANAGEversion','201705131');
+define('MANAGEversion','201705151');
 require_once('class/db.php');
 
 @error_reporting(E_ALL &~ E_NOTICE);
