@@ -1,2 +1,2 @@
-## 主页： http://colintree.github.io/TinyWebDB_SAE_PHP
-## HOME PAGE: http://colintree.github.io/TinyWebDB_SAE_PHP
+## 主页： http://tsp.colintree.cn/TinyWebDB_SAE_PHP
+## HOME PAGE: http://tsp.colintree.cn/TinyWebDB_SAE_PHP
