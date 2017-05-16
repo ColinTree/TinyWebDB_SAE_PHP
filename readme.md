@@ -1,7 +1,7 @@
 <br>
 
 ## TinyWebDB_SAE_PHP (TSP)
-[首页](/) - [下载页](下载页) - [安装方法](安装方法) - [使用手册](使用手册)
+[首页](http://tsp.colintree.cn/) - [下载页](http://tsp.colintree.cn/下载页) - [安装方法](http://tsp.colintree.cn/安装方法) - [使用手册](http://tsp.colintree.cn/使用手册)
   
 ***
  
