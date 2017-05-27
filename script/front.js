@@ -1,3 +1,14 @@
+function CheckUpdate(url,compare){
+    $.ajax({
+        sync:true,
+        url:"http://"+url+"/version/TinyWebDB_SAE_PHP",
+        method:'get'
+    }).done(function(response){
+        if(response>compare){
+            $("#update_available").css('display','inline-block');
+        }
+    });
+}
 $(document).ready(function(){
     $("form[action='/tinywebdb/getvalue']").submit(function(){
         $.ajax({sync:true,url:$(this).attr("action"),method:"POST",data:{"tag":$("#getvalue_tag").val()}}).done(function(response){if(response[2]=="")$("#getvalue_value").text("该标签的值为空").css("color","#555");else $("#getvalue_value").text(response[2]).css("color","black");}).fail(function(){$("#getvalue_value").text("获取失败(可能无权限)").css("color","#555");});

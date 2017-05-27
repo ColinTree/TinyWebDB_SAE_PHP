@@ -9,3 +9,9 @@ handle:
 - rewrite: if(path=="/tinywebdb/savefile" && query_string=="filename=(.*)")goto "/php/tinywebdb.php?do=savefile&filename=%1 [L]"
 - rewrite: if(path=="/tinywebdb/updatefile" && query_string=="filename=(.*)")goto "/php/tinywebdb.php?do=updatefile&filename=%1 [L]"
 - rewrite: if(path=="/tinywebdb/file(.*)")goto "/php/tinywebdb.php?do=getfile&filename=$1 [L]"
+- rewrite: if(path=="/tinywebdb/autobackup")goto "/php/autobackup.php [L]"
+
+cron:
+- url: /tinywebdb/autobackup
+  schedule: "0 5 * * *"
+  description: "每天早上 5 点执行自动备份"

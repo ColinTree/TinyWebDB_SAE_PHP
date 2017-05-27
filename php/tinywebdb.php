@@ -1,5 +1,5 @@
 <?
-define('MANAGEversion','201705151');
+define('MANAGEversion','201705251');
 require_once('class/db.php');
 
 $getSettingDefault='special_getSetting';
@@ -53,7 +53,11 @@ if(isset($_REQUEST['do'])){
                 exit('无法访问目录');
             }else{
                 $auth=kvfile::auth($filepath);
-                if($auth===false || ($auth!='wr' && $auth!='rw' && $auth!='r')){
+                session_start();
+                if((isset($_SESSION['tinywebdbmanage'])?$_SESSION['tinywebdbmanage']:'')==md5(setting::get('password'))){
+                    $manage_logined=true;
+                }
+                if($auth===false || ($auth!='wr' && $auth!='rw' && $auth!='r') && $manage_logined!==true){
                     http_response_code(401);
                     exit('无权限访问'.htmlspecialchars($filepath));
                 }
@@ -61,7 +65,7 @@ if(isset($_REQUEST['do'])){
                 while(strlen($tmpfn)>1){
                     while(substr($tmpfn,-1)!='/'){ $tmpfn=substr($tmpfn,0,strlen($tmpfn)-1); }
                     $auth=kvfile::auth($tmpfn);
-                    if($auth!='wr'&&$auth!='rw'&&$auth!='r'){
+                    if($auth!='wr'&&$auth!='rw'&&$auth!='r' && $manage_logined!==true){
                         http_response_code(401);
                         exit('无权限访问'.htmlspecialchars($tmpfn).'下的文件');
                     }else{
@@ -159,7 +163,7 @@ if(isset($_REQUEST['do'])){
     }
 }else{?><html>
     <head><title>TinyWebDB Manage System</title><link rel="stylesheet" href="/script/front.css"><script src="//cdn.bootcss.com/jquery/3.2.1/jquery.js"></script><script src="/script/front.js"></script></head>
-    <body>
+    <body onload="setTimeout(CheckUpdate('aix.colintree.cn',<? echo MANAGEversion;?>),2000);setTimeout(CheckUpdate('www.source-space.cn',<? echo MANAGEversion;?>),2000);">
         <div id="content">
             <div id="content_title">TinyWebDB可视化操作页面</div>
             <div id="content_subtitle">您的网络微数据库地址是：http://<? echo $_SERVER["HTTP_APPNAME"]; ?>.applinzi.com/tinywebdb</div>
@@ -200,7 +204,7 @@ if(isset($_REQUEST['do'])){
 <?
     }
 ?>
-            <div id="signature">By ColinTree, Version <? echo MANAGEversion;?></div>
+            <div id="signature">By ColinTree, Version <? echo MANAGEversion;?><a id="update_available" href="http://tsp.colintree.cn/下载页" target="_blank" style="display:none;color:red;">有更新</a></div>
         </div>
     </body>
 </html><?}?>

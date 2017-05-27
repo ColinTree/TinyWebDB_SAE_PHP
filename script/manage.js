@@ -19,6 +19,8 @@ function lineNumber(jqueryEle){
         $.each(arr,function(i,item){
             if(item.trim()!=""){
                 text+="<li><a>"+item+"</a></li>";
+            }else{
+                text+="<li><a style='height:18.4px;'></a></li>";
             }
         });
         if(text=='<ol>'){
@@ -83,6 +85,10 @@ $(document).ready(function(){
     });
 
     //file - buttons
+    function getFileName(o){
+        var pos=o.lastIndexOf("\/");
+        return o.substring(pos+1);
+    }
     $('#file_upload_div>button').click(function(){
         $('#file_upload_background').fadeIn(200);
     });
@@ -95,7 +101,7 @@ $(document).ready(function(){
         $('#file_auth_background').fadeIn(200).attr('kvfile-filepath',filepath).addClass('loading')
             .children('div[class*=panel-default]').css('left','50%').css('top','50%')
             .parent().find('input,button').prop('disabled',true);
-        $('#file_auth_background [class*=heading] h3').text('设置'+($(this).is('[kvfile-dir-auth]') ? '目录' : '文件')+'权限');
+        $('#file_auth_background [class*=heading] h3').text('设置'+($(this).is('[kvfile-dir-auth]') ? '目录' : '文件')+'权限：'+getFileName(filepath));
         $.ajax({
             type:"post",
             async:true,
@@ -147,8 +153,8 @@ $(document).ready(function(){
             .find('[file-loading]').show()
             .next().hide()
             .next().hide();
-        $('#file_preview_background')
-            .children('div[class*=panel-default]').css('left','50%').css('top','50%');
+        $('#file_preview_background div[class*=panel-default]').css('left','50%').css('top','50%');
+        $('#file_preview_background div[class*=heading] h3').text('预览文件：'+getFileName($(this).parent().prev().children('a').attr('kvfile-filepath')));
         var filepath='?a=file-get&noecho=true&filename='+encodeURI($(this).parent().prev().children('a').attr('kvfile-filepath'));
         var ct=$(this).parent().parent().find('[kvfile-filesize]').text(); //content-type showed(some in chinese)
         if(ct.match(/图片/)){
@@ -167,7 +173,7 @@ $(document).ready(function(){
                 lineNumber($('#file_preview_background [file-loading]').next().next());
             }).fail(function(){
                 alertify.error('获取文件内容失败');
-                $('#file_preview_background').fadeOut(200)
+                $('#file_preview_background').fadeOut(200);
             });
         }else{
             $('#file_preview_background [file-loading]').hide()
@@ -384,7 +390,7 @@ $(document).ready(function(){
             .children('div[class*=panel-default]').css('left','50%').css('top','50%');
         $('#tag_show_background [button-task]').prop('disabled',true);
         if($(this).text()=='查看'){
-            $('#tag_show_background [button-task]').text('查看原值');
+            $('#tag_show_background [button-task]').filter('[button-task=show-tag-json],[button-task=show-tag]').text('查看原值');
         }
         $.ajax({
             sync:true,
@@ -393,11 +399,38 @@ $(document).ready(function(){
             data:{'noecho':true,'tag':tag}
         }).done(function(response){
             var btn=$('#tag_show_background [button-task]');
+            var thisbtn=btn.filter('[button-task=show-tag-json],[button-task=show-tag]');
             btn .attr('tinywebdb_key',response.tag)
-                .attr('button-task',btn.text()=='查看原值' ? 'show-tag-json' : 'show-tag')
-                .text(btn.text()=='解析列表(或JSON)' ? '查看原值' : '解析列表(或JSON)')
-                .prop('disabled',false)
+                .prop('disabled',false);
+            thisbtn
+                .attr('button-task',thisbtn.text()=='查看原值' ? 'show-tag-json' : 'show-tag')
+                .text(thisbtn.text()=='解析列表(或JSON)' ? '查看原值' : '解析列表(或JSON)')
                 .focus();
+            $('#tag_show_background code').text(response.tag);
+            $('#tag_show_background pre').text(response.value);
+            lineNumber($('#tag_show_background pre.line-number'));
+        }).fail(function(){
+            $('#tag_show_background pre').text('获取失败');
+            $('#tag_show_background [button-task]').prop('disabled',false).focus();
+        });
+    });
+    //all - buttons - show tag - refresh
+    $('[button-task=show-tag-refresh]').click(function(){
+        var tag=$(this).attr('tinywebdb_key');
+        $('#tag_show_background code').text(tag);
+        $('#tag_show_background pre').text('加载中……');
+        $('#tag_show_background').fadeIn(200)
+            .children('div[class*=panel-default]').css('left','50%').css('top','50%');
+        $('#tag_show_background [button-task]').prop('disabled',true);
+        $.ajax({
+            sync:true,
+            method:'post',
+            url:'?a=apiget'+($(this).prev().attr('button-task').substring(8)=='' ? '-json' : ''),
+            data:{'noecho':true,'tag':tag}
+        }).done(function(response){
+            var btn=$('#tag_show_background [button-task]');
+            btn .attr('tinywebdb_key',response.tag)
+                .prop('disabled',false);
             $('#tag_show_background code').text(response.tag);
             $('#tag_show_background pre').text(response.value);
             lineNumber($('#tag_show_background pre.line-number'));

@@ -17,9 +17,15 @@ if(isset($_POST['setting_type'])){
     }
     // backup
     if($_POST['setting_type']=='backup'){
-        // TODO: add one that is the download file name.
         setting::set('backup_excel_store_to_storage',$_REQUEST['excel_store_to_storage']);
         setting::set('backup_excel_auto_width',$_REQUEST['excel_auto_width']);
+    }
+    // autobackup
+    if($_POST['setting_type']=='autobackup'){
+        setting::set('autobackup',$_REQUEST['autobackup']);
+        setting::set('autobackup_type',$_REQUEST['autobackup_type']);
+        setting::set('autobackup_auth',$_REQUEST['autobackup_auth']);
+        setting::set('autobackup_prefix',$_REQUEST['autobackup_prefix']);
     }
     // special_tags
     if($_POST['setting_type']=='special_tags'){
@@ -145,14 +151,41 @@ if(isset($_POST['setting_type'])){
                 </form>
             </li>
             <hr>
-            <li><p id="backup"><? echo($_POST['setting_type']=='backup'?'    ':'&gt;');?>&nbsp;备份相关</p></li>
-            <li<? echo($_POST['setting_type']=='backup'?'':' style="display:none"');?> id="backup_li">
+            <li><p id="backup"><? echo(substr($_POST['setting_type'],-6)=='backup'?'    ':'&gt;');?>&nbsp;备份相关</p></li>
+            <li<? echo(substr($_POST['setting_type'],-6)=='backup'?'':' style="display:none"');?> id="backup_li">
                 <form action="?a=setting#backup" method="post">
                     <input type="hidden" name="setting_type" value="backup"/>
                     <div class="checkbox"><label><input type="checkbox" name="excel_store_to_storage"<? if(setting::get('backup_excel_store_to_storage')=='on')echo'checked';?>/>导出的excel表自动存档备份至Storage</label></div>
                     <div class="checkbox"><label><input type="checkbox" name="excel_auto_width"<? if(setting::get('backup_excel_auto_width')=='on')echo'checked';?>/>导出Excel表自动调整列宽</label></div>
                     <p><input type="submit" value="保存" class="btn btn-default"/><? if($_POST['setting_type']=='backup')echo'已保存'; ?></p>
                 </form>
+                <hr>
+                <p style="font-size:16px;">自动备份（北京时间，每日凌晨5点）</p>
+                <form action="?a=setting#backup" method="post">
+                    <input type="hidden" name="setting_type" value="autobackup"/>
+                    <div class="checkbox"><label><input type="checkbox" name="autobackup"<? if(setting::get('autobackup')=="on")echo"checked";?>/>开启自动备份</label></div>
+                    <p>
+                        备份类型：<br>
+                        <select name="autobackup_type" class="form-control">
+                            <option value="json"<? echo(setting::get('autobackup_type')=='json'?' selected':'');?>>Json</option>
+                            <option value="excel"<? echo(setting::get('autobackup_type')=='excel'?' selected':'');?>>Excel</option>
+                        </select>
+                    <p>
+                    <p>
+                        备份文件夹权限设置：<br>
+                        <select name="autobackup_auth" class="form-control">
+                            <option value=""<? $tmp_auth=setting::get('autobackup_auth');echo($tmp_auth!='wr'&&$tmp_auth!='w'&&$tmp_auth!='r'?' selected':'');?>>外部读写均禁用</option>
+                            <option value="wr"<? echo($tmp_auth=='wr'?' selected':'');?>>允许读和写</option>
+                            <option value="w"<? echo($tmp_auth=='w'?' selected':'');?>>允许外部写入</option>
+                            <option value="r"<? echo($tmp_auth=='r'?' selected':'');unset($tmp_auth);?>>允许读取</option>
+                        </select>
+                        此项生效时间：每次备份完成之后，系统会将自动备份所保存的目录<a href="?a=file&dir=/autobackup/">/autobackup/</a>的权限更新为此设置<br>
+                        注意：如果允许写入，需谨防恢复文件被覆盖；如果允许读取，则需谨防数据泄露
+                    </p>
+                    <p>备份的标签前缀(以此开头的标签才会被自动备份)：<input type="text" class="form-control" name="autobackup_prefix" autocomplete="off" value="<? echo htmlspecialchars(setting::get('autobackup_prefix')); ?>" placeholder="此项留空将备份所有标签"/></p>
+                    <p><input type="submit" value="保存" class="btn btn-default"/><? if($_POST['setting_type']=='autobackup')echo'已保存'; ?></p>
+                </form>
+
             </li>
             <hr>
             <li><p id="change_password"><? echo($_POST['setting_type']=='change_password'?'    ':'&gt;');?>&nbsp;修改密码</p></li>
