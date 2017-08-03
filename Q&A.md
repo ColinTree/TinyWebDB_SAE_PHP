@@ -1,36 +1,24 @@
 <br>
 
 ## TinyWebDB_SAE_PHP (TSP)
-[首页](/) - [下载页](下载页) - [安装方法](安装方法) - [使用手册](使用手册) - [意见反馈](意见反馈)
+[首页](/) - [下载页](下载页) - [安装方法](安装方法) - [使用手册](使用手册) - [意见反馈](意见反馈) - [Q&A](Q&A)
   
 ***
   
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="http://cdn.bootcss.com/alertify.js/0.3.11/alertify.default.min.css" rel="stylesheet">
-<link href="http://cdn.bootcss.com/alertify.js/0.3.11/alertify.core.min.css" rel="stylesheet">
-<script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="http://cdn.bootcss.com/alertify.js/0.3.11/alertify.min.js"></script>
-<script>
-$(document).ready(function(){
-	$('form').submit(function(){
-		if($('textarea').val()==''){
-			alertify.error('内容为空');
-			return false;
-		}
-		$('textarea').prop('disabled',true);
-		$('input[type=submit]').prop('disabled',true);
-		$.ajax({async:true, url:'http://colintreeDB.applinzi.com/php/tsp_feedback.php', method:'post', data:{'text':$('textarea').val()}})
-		.done(function(response){if(response=='1'){$('input[type=submit]').next().text('保存成功，感谢您的反馈！').prop('disabled',true);}else{alertify.error('保存失败');$('textarea').prop('disabled',false);$('input[type=submit]').prop('disabled',false);}})
-		.fail(function(){alertify.error('保存失败');$('textarea').prop('disabled',false);$('input[type=submit]').prop('disabled',false);});
-		return false;
-	});
-});
-</script>
-<form action="http://colintreeDB.applinzi.com/php/tsp_feedback.php" method="post">
-	<textarea name="text" placeholder="畅所欲言吧" style="width:100%;height:200px;resize:none"></textarea>
-	<br>
-	<input type="submit" value="提交"/>&nbsp;&nbsp;<span></span>
-</form>
+
+* 问：如何禁用掉特殊标签功能呢？  
+  答：暂时没有制作直接禁用的功能，但是可以通过设置一个他人无法猜到的标签，作为代替方案  
+
+* 问：更新之后用起来有问题怎么办（比如说新功能无响应）  
+  答：试试强制刷新浏览器页面（Ctrl + F5）  
+
+* 问：为什么安装（上传）完成后进到 http://{应用ID}.applinzi.com 时是新浪的广告呢  
+  答：不占用主页是因为方便用户对单个应用进行功能拓展  
+
+* 问：为什么进到 http://{应用ID}.applinzi.com/tinywebdb 的前台页面时，提示已被禁用？  
+  答：前端的可视化页面默认是禁用的哦，将 http://{应用ID}.applinzi.com/tinywebdb/manage?a=setting 的设置 => 数据安全 里的两个选项：允许可视化操作页面 和 允许来自浏览器对数据库的访问 勾上并保存，即可正常使用啦  
+
+* 更多正在补充……敬请到[意见反馈](意见反馈)提出
   
 ***
   
