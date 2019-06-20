@@ -1,1 +1,0 @@
-<? namespace Mimey;interface MimeTypesInterface{public function getMimeType($extension);public function getExtension($mime_type);public function getAllMimeTypes($extension);public function getAllExtensions($mime_type);}
